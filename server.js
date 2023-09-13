@@ -70,9 +70,20 @@ async function getData(endpoint) {
 app.get("/dashboard", async (req, res) => {
 
   const userInfo = await getData("/me");
-  const savedTracks = await getData("/me/tracks?limit=20");
+  const savedTracks = await getData("/me/tracks?limit=10");
 
   res.render("dashboard", { user: userInfo, userTracks: savedTracks.items })
+});
+
+app.get("/recommendations", async (req, res) => {
+  const artist_id = req.query.artists;
+  const track_id = req.query.track;
+  const params = new URLSearchParams({
+    seed_artist: artist_id,
+    seed_tracks: track_id,
+  })
+  const data = await getData('/recommendations?' + params);
+  res.render("recommendation", { tracks: data.tracks, seed_artist: artist_id, seed_tracks: track_id })
 });
 
 let listener = app.listen(3000, function () {
