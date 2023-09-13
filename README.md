@@ -1,1 +1,1 @@
-# spotify-api-workshop# spotify-api
+# A Spotify Recommendations App
