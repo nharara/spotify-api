@@ -22,7 +22,7 @@ app.get("/authorize", (req, res) => {
   var auth_query_parameters = new URLSearchParams({
     response_type: "code",
     client_id: client_id,
-    scope: "",
+    scope: "user-library-read",
     redirect_uri: redirect_uri
   })
 
@@ -55,16 +55,24 @@ app.get("/callback", async (req, res) => {
   res.redirect("/dashboard")
 });
 
-app.get("/dashboard", async (req, res) => {
-  const response = await fetch("https://api.spotify.com/v1/me", {
+async function getData(endpoint) {
+  const response = await fetch("https://api.spotify.com/v1" + endpoint, {
     method: "get",
     headers: {
       'Authorization': "Bearer " + global.access_token
     }
   });
+
   const data = await response.json();
-  console.log(data);
-  res.render("dashboard", { user: data })
+  return data;
+}
+
+app.get("/dashboard", async (req, res) => {
+
+  const userInfo = await getData("/me");
+  const savedTracks = await getData("/me/tracks?limit=20");
+
+  res.render("dashboard", { user: userInfo, userTracks: savedTracks.items })
 });
 
 let listener = app.listen(3000, function () {
