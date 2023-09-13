@@ -1,15 +1,16 @@
 extends layout.pug
-    
+
 block content
-    h1 Recommendations
+  h1 Here are recommendations based off that track:
 
-    table 
-      each t in tracks
-        tr 
-          - var artist_name = t.artists[0].name
-          - var track_name = t.name
-          - var track_preview = t.preview_url
-
-          td #{artist_name}
-          td #{track_name}
-          td: a(href=track_preview) Preview
+  table
+    each t in tracks
+      tr
+      - var artist_name = t.artists[0].name
+      - var track_name = t.name
+      - var track_preview = t.preview_url
+      //- - var artist_name = t.artists.id[0].id
+      //- - var track_id = t.id
+      td #{artist_name}
+      td #{track_name}
+      td: a(href=track_preview) Preview
